@@ -1,8 +1,6 @@
 # MSK TrackPhone
 Get the Player by PhoneNumber and add a Blip
 
-**FiveM Forum:** https://forum.cfx.re/t/release-esx-secretblips-make-blips-visible-with-an-item/4795682
-
 **Discord Support:** https://discord.gg/5hHSBRHvJE
 
 ## Description
@@ -21,6 +19,6 @@ local xPlayer = exports.msk_trackphone:getPlayer(094123456)
 ```
 
 ## Requirements
-* ESX 1.2 or above
-* oxmysql
-* msk_core
+* [ESX 1.2 and above](https://github.com/esx-framework/esx_core)
+* [oxmysql](https://github.com/overextended/oxmysql)
+* [msk_core](https://github.com/MSK-Scripts/msk_core)

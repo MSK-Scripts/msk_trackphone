@@ -1,7 +1,7 @@
 Config = {}
 ----------------------------------------------------------------
 Config.Locale = 'de'
-Config.VersionChecker = false
+Config.VersionChecker = true
 Config.Debug = true
 ----------------------------------------------------------------
 Config.MySQL = {
