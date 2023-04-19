@@ -1,17 +1,8 @@
-AddEventHandler('onResourceStart', function(resource)
-	if GetCurrentResourceName() ~= 'msk_trackphone' then
-        print('^1Please rename the Script to^3 msk_trackphone^0!')
-        print('^1Server will be shutdown^0!')
-        os.exit()
-    end
-end)
-
-ESX = exports["es_extended"]:getSharedObject()
-MSK = exports.msk_core:getCoreObject()
-
-MSK.RegisterCallback('msk_trackphone:getPlayer', function(source, cb, number)
-	cb(getPlayer(number, source))
-end)
+if Config.Framework:match('ESX') then -- ESX Framework
+    ESX = exports["es_extended"]:getSharedObject()
+elseif Config.Framework:match('QBCore') then -- QBCore Framework
+	QBCore = exports['qb-core']:GetCoreObject()
+end
 
 getPlayer = function(number, source)
     number = tostring(number)
@@ -33,18 +24,27 @@ getPlayer = function(number, source)
             ["@phonenumber"] = number
         })
 
-        if data[1] and data[1][Config.MySQL.identifier] then
+        if data and data[1] and data[1][Config.MySQL.identifier] then
             identifier = data[1][Config.MySQL.identifier]
         end
     end
 
-    local xPlayer = ESX.GetPlayerFromIdentifier(identifier)
+    local xPlayer
+    if Config.Framework:match('ESX') then -- ESX Framework
+        xPlayer = ESX.GetPlayerFromIdentifier(identifier)
+    elseif Config.Framework:match('QBCore') then -- QBCore Framework
+        xPlayer = QBCore.Functions.GetPlayerByCitizenId(identifier)
+    end
 
     TriggerClientEvent('msk_trackphone:addBlip', source, xPlayer)
 
     return xPlayer
 end
 exports('getPlayer', getPlayer)
+
+MSK.RegisterCallback('msk_trackphone:getPlayer', function(source, cb, number)
+	cb(getPlayer(number, source))
+end)
 
 logging = function(code, ...)
     if Config.Debug then

@@ -1,5 +1,5 @@
 # MSK TrackPhone
-Get the Player by PhoneNumber and add a Blip
+[ESX/QBCore] Get the Player by PhoneNumber and add a Blip
 
 **Discord Support:** https://discord.gg/5hHSBRHvJE
 
@@ -19,6 +19,6 @@ local xPlayer = exports.msk_trackphone:getPlayer(094123456)
 ```
 
 ## Requirements
-* [ESX 1.2 and above](https://github.com/esx-framework/esx_core)
+* [ESX 1.2 and above](https://github.com/esx-framework/esx_core) or [QBCore](https://github.com/qbcore-framework/qb-core)
 * [oxmysql](https://github.com/overextended/oxmysql)
 * [msk_core](https://github.com/MSK-Scripts/msk_core)

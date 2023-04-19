@@ -1,7 +1,9 @@
-ESX = exports["es_extended"]:getSharedObject()
-MSK = exports.msk_core:getCoreObject()
+if Config.Framework:match('ESX') then -- ESX Framework
+    ESX = exports["es_extended"]:getSharedObject()
+elseif Config.Framework:match('QBCore') then -- QBCore Framework
+	QBCore = exports['qb-core']:GetCoreObject()
+end
 
-local msk_trackphone_timer = false
 local Blips = {}
 
 RegisterNetEvent('msk_trackphone:addBlip') 
@@ -10,15 +12,26 @@ AddEventHandler('msk_trackphone:addBlip', function(xPlayer)
 end)
 
 addBlip = function(xPlayer)
-    local player = GetPlayerFromServerId(xPlayer.source)
+    local playerSource = 0
+    local playerName = 'Unknown Unknown'
+
+    if Config.Framework:match('ESX') then -- ESX Framework
+        playerSource = xPlayer.source
+        playerName = xPlayer.name
+    elseif Config.Framework:match('QBCore') then -- QBCore Framework
+        playerSource = xPlayer.PlayerData.source
+        playerName = xPlayer.PlayerData.charinfo.firstname .. ' ' .. xPlayer.PlayerData.charinfo.lastname
+    end
+
+    local player = GetPlayerFromServerId(playerSource)
     local ped = GetPlayerPed(player)
 
-    if not ped then return logging('debug', 'PlayerPed from ' .. xPlayer.source .. ' not found!') end
+    if not ped then return logging('error', 'PlayerPed from ID ^2' .. playerSource .. '^0 not found!') end
     local blip = AddBlipForEntity(ped)
 
     SetBlipAsShortRange(blip, false)
     BeginTextCommandSetBlipName('STRING') 
-    AddTextComponentString(('%s (%s)'):format(xPlayer.name, number))
+    AddTextComponentString(('%s (%s)'):format(playerName, number))
     EndTextCommandSetBlipName(blip)
 
     table.insert(Blips, blip)
@@ -28,8 +41,8 @@ end
 startTimer = function()
     logging('debug', 'Timer started')
 
-    craftingTimerTask = MSK.AddTimeout(Config.Time * 6000, function()
-        logging('debug', 'Timer stopped')
+    local timeout = MSK.AddTimeout(Config.Time * 60000, function()
+        logging('debug', 'Timer stopped. Remove Player Blip...')
 
         for k, v in pairs(Blips) do
             RemoveBlip(v)

@@ -3,10 +3,12 @@ Config = {}
 Config.VersionChecker = true
 Config.Debug = true
 ----------------------------------------------------------------
+Config.Framework = 'ESX' -- Set to 'ESX' or 'QBCore'
+----------------------------------------------------------------
 Config.MySQL = {
-    table = 'phones', -- In which table is the phonenumber located // default: 'users'
-    phonenumber = 'phone_number', -- Column for phonenumber // default: 'phone_number'
-    identifier = 'identifier' -- identifier for table // default: 'identifier'
+    table = 'phones', -- In which table is the phonenumber located // Default ESX: 'users' // Default QB: 'players'
+    phonenumber = 'phone_number', -- Column for phonenumber // Default ESX: 'phone_number' // Default QB: 'charinfo'
+    identifier = 'identifier' -- identifier for table // Default ESX: 'identifier' // Default QB: 'citizenid'
 }
 ----------------------------------------------------------------
-Config.Time = 5 -- in minutes // After what time does the blip gets removed
+Config.Time = 5 -- in minutes // After this time the blip gets removed
