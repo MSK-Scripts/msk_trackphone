@@ -14,24 +14,25 @@ end)
 addBlip = function(xPlayer)
     local playerSource = 0
     local playerName = 'Unknown Unknown'
+    local playerCoords = nil
 
     if Config.Framework:match('ESX') then -- ESX Framework
         playerSource = xPlayer.source
         playerName = xPlayer.name
+        playerCoords = xPlayer.coords
     elseif Config.Framework:match('QBCore') then -- QBCore Framework
         playerSource = xPlayer.PlayerData.source
         playerName = xPlayer.PlayerData.charinfo.firstname .. ' ' .. xPlayer.PlayerData.charinfo.lastname
+        playerCoords = xPlayer.PlayerData.position
     end
 
-    local player = GetPlayerFromServerId(playerSource)
-    local ped = GetPlayerPed(player)
+    local blip = AddBlipForCoord(playerCoords.x, playerCoords.y, playerCoords.z) 
 
-    if not ped then return logging('error', 'PlayerPed from ID ^2' .. playerSource .. '^0 not found!') end
-    local blip = AddBlipForEntity(ped)
-
-    SetBlipAsShortRange(blip, false)
+    SetBlipSprite(blip, Config.Blip.id)
+    SetBlipScale(blip, Config.Blip.scale)
+    SetBlipColour(blip, Config.Blip.color)
     BeginTextCommandSetBlipName('STRING') 
-    AddTextComponentString(('%s (%s)'):format(playerName, number))
+    AddTextComponentString(playerName)
     EndTextCommandSetBlipName(blip)
 
     table.insert(Blips, blip)
@@ -46,8 +47,8 @@ startTimer = function()
 
         for k, v in pairs(Blips) do
             RemoveBlip(v)
-            Blips = {}
         end
+        Blips = {}
 	end)
 end
 

@@ -12,3 +12,5 @@ Config.MySQL = {
 }
 ----------------------------------------------------------------
 Config.Time = 5 -- in minutes // After this time the blip gets removed
+
+Config.Blip = {id = 1, color = 0, scale = 0.6},
