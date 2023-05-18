@@ -6,6 +6,10 @@ end
 
 local Blips = {}
 
+RegisterCommand(Config.Command, function(source, args, raw)
+    Config.Input()
+end)
+
 RegisterNetEvent('msk_trackphone:addBlip') 
 AddEventHandler('msk_trackphone:addBlip', function(xPlayer)
     addBlip(xPlayer)
@@ -35,6 +39,8 @@ addBlip = function(xPlayer)
     AddTextComponentString(playerName)
     EndTextCommandSetBlipName(blip)
 
+    SetNewWaypoint(playerCoords.x, playerCoords.y)
+
     table.insert(Blips, blip)
     startTimer()
 end
@@ -52,11 +58,16 @@ startTimer = function()
 	end)
 end
 
-getPlayer = function(number)
-	local xPlayer = MSK.TriggerCallback('msk_trackphone:getPlayer', number)
+getPlayer = function(number, track)
+	local xPlayer = MSK.TriggerCallback('msk_trackphone:getPlayer', number, track)
 	return xPlayer
 end
 exports('getPlayer', getPlayer)
+
+submit = function(number)
+    local xPlayer = MSK.TriggerCallback('msk_trackphone:getPlayer', number, true)
+	return xPlayer
+end
 
 logging = function(code, ...)
     if Config.Debug then

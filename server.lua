@@ -4,9 +4,9 @@ elseif Config.Framework:match('QBCore') then -- QBCore Framework
 	QBCore = exports['qb-core']:GetCoreObject()
 end
 
-getPlayer = function(number, source)
+getPlayer = function(number, source, track)
     number = tostring(number)
-    local identifier = 'Identifier not found'
+    local identifier = nil
 
     if Config.MySQL.phonenumber:match('charinfo') then
         local data = MySQL.query.await(('SELECT * from %s'):format(Config.MySQL.table))
@@ -29,21 +29,37 @@ getPlayer = function(number, source)
         end
     end
 
-    local xPlayer
-    if Config.Framework:match('ESX') then -- ESX Framework
-        xPlayer = ESX.GetPlayerFromIdentifier(identifier)
-    elseif Config.Framework:match('QBCore') then -- QBCore Framework
-        xPlayer = QBCore.Functions.GetPlayerByCitizenId(identifier)
+    if track then
+        MSK.Notification(source, 'Searching for number...')
+        Wait(5000)
     end
 
+    if not identifier then return MSK.Notification(source, 'Number is not registered') end
+    local xPlayer, canTrack = nil, false
+
+    if Config.Framework:match('ESX') then -- ESX Framework
+        xPlayer = ESX.GetPlayerFromIdentifier(identifier)
+        local hasItem = xPlayer.getInventoryItem(Config.neededItem.item)
+        if Config.neededItem and hasItem and hasItem.count > 0 then canTrack = true end
+    elseif Config.Framework:match('QBCore') then -- QBCore Framework
+        xPlayer = QBCore.Functions.GetPlayerByCitizenId(identifier)
+        local hasItem = xPlayer.Functions.GetItemByName(item)
+        if Config.neededItem and hasItem then canTrack = true end
+    end
+
+    if track then
+        if not canTrack then return MSK.Notification(source, 'Could not locate the Phone. Maybe it\'s disabled.') end
+        MSK.Notification(source, 'Found location of the Phone')
+        MSK.Notification(xPlayer.source, 'Your position has just been tracked using your phonenumber')
+    end
     TriggerClientEvent('msk_trackphone:addBlip', source, xPlayer)
 
     return xPlayer
 end
 exports('getPlayer', getPlayer)
 
-MSK.RegisterCallback('msk_trackphone:getPlayer', function(source, cb, number)
-	cb(getPlayer(number, source))
+MSK.RegisterCallback('msk_trackphone:getPlayer', function(source, cb, number, track)
+	cb(getPlayer(number, source, track))
 end)
 
 logging = function(code, ...)

@@ -11,11 +11,11 @@
 ## Export
 You can use it clientside and serverside
 ```lua
-exports.msk_trackphone:getPlayer(number)
+exports.msk_trackphone:getPlayer(number --[[number]], track --[[boolean / whether show a blip or not]])
 ```
 **Example:**
 ```lua
-local xPlayer = exports.msk_trackphone:getPlayer(094123456)
+local xPlayer = exports.msk_trackphone:getPlayer(094123456, true)
 ```
 
 ## Requirements

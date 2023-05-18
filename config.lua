@@ -11,6 +11,11 @@ Config.MySQL = {
     identifier = 'identifier' -- identifier for table // Default ESX: 'identifier' // Default QB: 'citizenid'
 }
 ----------------------------------------------------------------
+Config.Blip = {id = 280, color = 5, scale = 0.8}
 Config.Time = 5 -- in minutes // After this time the blip gets removed
-
-Config.Blip = {id = 1, color = 0, scale = 0.6},
+Config.neededItem = {enable = true, item = 'phone'}
+----------------------------------------------------------------
+Config.Command = 'trackphone' -- Open a Input Menu
+Config.Input = function()
+    exports['an_dialogBox']:showDialog('msk_trackphone', 'Track the phonenumber', '0', 'Insert the Phonenumber of the Player you want to track', submit)
+end
