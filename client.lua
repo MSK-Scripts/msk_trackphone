@@ -59,19 +59,17 @@ startTimer = function()
 end
 
 getPlayer = function(number, track)
-	local xPlayer = MSK.TriggerCallback('msk_trackphone:getPlayer', number, track)
+	local xPlayer = MSK.Trigger('msk_trackphone:getPlayer', number, track)
 	return xPlayer
 end
 exports('getPlayer', getPlayer)
 
 submit = function(number)
-    local xPlayer = MSK.TriggerCallback('msk_trackphone:getPlayer', number, true)
+    local xPlayer = MSK.Trigger('msk_trackphone:getPlayer', number, true)
 	return xPlayer
 end
 
 logging = function(code, ...)
-    if Config.Debug then
-        local script = "[^2"..GetCurrentResourceName().."^0]"
-        MSK.logging(script, code, ...)
-    end
+    if not Config.Debug then return end
+    MSK.Logging(code, ...)
 end

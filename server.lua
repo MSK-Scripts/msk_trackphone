@@ -58,15 +58,13 @@ getPlayer = function(number, source, track)
 end
 exports('getPlayer', getPlayer)
 
-MSK.RegisterCallback('msk_trackphone:getPlayer', function(source, cb, number, track)
-	cb(getPlayer(number, source, track))
+MSK.Register('msk_trackphone:getPlayer', function(source, number, track)
+	return getPlayer(number, source, track)
 end)
 
 logging = function(code, ...)
-    if Config.Debug then
-        local script = "[^2"..GetCurrentResourceName().."^0]"
-        MSK.logging(script, code, ...)
-    end
+    if not Config.Debug then return end
+    MSK.Logging(code, ...)
 end
 
 GithubUpdater = function()
